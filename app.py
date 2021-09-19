@@ -1,18 +1,19 @@
+#!/usr/bin/env python
 import argparse
 import smtplib
-import sys
 from email.mime.text import MIMEText
 
 import yaml
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-t", type=str, help="Title")
-parser.add_argument("-f", type=str, required=True, help="string to send")
+parser.add_argument("-T", type=str, help="Title")
+parser.add_argument("-F", type=str, required=True, help="string to send")
+parser.add_argument("--config", type=str, required=True, help="config location")
 args = parser.parse_args()
 
-with open("config.yml") as config:
-    msg = MIMEText(args.f)
-    msg["Subject"] = args.t
+with open(args.config) as config:
+    msg = MIMEText(args.F)
+    msg["Subject"] = args.T
     config = yaml.load(config, Loader=yaml.FullLoader)
     s = smtplib.SMTP(config["SMTP_SERVER"], config["SMTP_PORT"])
     s.starttls()
